@@ -5,3 +5,4 @@ psycopg[binary]
 alembic
 boto3
 requests
+ddtrace

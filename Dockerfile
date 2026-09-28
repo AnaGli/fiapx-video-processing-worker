@@ -14,4 +14,4 @@ COPY . .
 
 ENV PYTHONPATH=/app
 
-CMD ["python", "-m", "app.main"]
+CMD ["ddtrace-run", "python", "-m", "app.main"]
