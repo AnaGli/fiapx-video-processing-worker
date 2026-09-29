@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: video-processing-worker-migrate
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: fiapx-video-processing-worker:latest
+          imagePullPolicy: IfNotPresent
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - configMapRef:
+                name: video-processing-worker-config
+            - secretRef:
+                name: video-processing-worker-secrets

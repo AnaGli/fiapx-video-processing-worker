@@ -1,0 +1,10 @@
+pika
+pydantic-settings
+sqlalchemy
+psycopg[binary]
+alembic
+boto3
+requests
+ddtrace
+pytest
+pytest-cov

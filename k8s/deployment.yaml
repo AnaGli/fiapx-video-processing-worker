@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-processing-worker
+  labels:
+    app: video-processing-worker
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: video-processing-worker
+
+  template:
+    metadata:
+      labels:
+        app: video-processing-worker
+        admission.datadoghq.com/enabled: "true"
+        tags.datadoghq.com/env: local
+        tags.datadoghq.com/service: video-processing-worker
+        tags.datadoghq.com/version: "1.0.0"
+
+    spec:
+      containers:
+        - name: video-processing-worker
+          image: fiapx-video-processing-worker:latest
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: DD_LOGS_INJECTION
+              value: "true"
+
+          envFrom:
+            - configMapRef:
+                name: video-processing-worker-config
+            - secretRef:
+                name: video-processing-worker-secrets
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
