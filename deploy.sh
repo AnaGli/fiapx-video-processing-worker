@@ -17,13 +17,16 @@ echo "Criando/atualizando Secret do worker a partir do .env..."
 kubectl delete secret video-processing-worker-secrets --ignore-not-found
 kubectl create secret generic video-processing-worker-secrets --from-env-file=.env
 
+echo "Aplicando ConfigMap..."
+kubectl apply -f k8s/configmap.yaml
+
 echo "Rodando migrations..."
 kubectl delete job video-processing-worker-migrate --ignore-not-found
 kubectl apply -f k8s/migration-job.yaml
 kubectl wait --for=condition=complete job/video-processing-worker-migrate --timeout=90s
 
-echo "Aplicando ConfigMap..."
-kubectl apply -f k8s/configmap.yaml
+echo "Aplicando metrics..."
+kubectl apply -f k8s/metrics.yaml
 
 echo "Aplicando Deployment do worker..."
 kubectl apply -f k8s/deployment.yaml
